@@ -3,20 +3,22 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Bullet
+  - Ground
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Bullet
+  - Item
+  - MiniMap
+  - Nonground
   - 
   - 
   - 
@@ -40,4 +42,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Back Ground
+    uniqueID: 1467473835
+    locked: 0
+  - name: Object
+    uniqueID: 3619204247
+    locked: 0
+  - name: Creature
+    uniqueID: 1968640955
+    locked: 0
+  - name: Player
+    uniqueID: 3320056721
     locked: 0
