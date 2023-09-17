@@ -190,7 +190,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log(inputVector);
+            //Debug.Log(inputVector);
             var mousePosition = (Vector2)Camera.main.ScreenToWorldPoint(inputVector);
             m_dashDirection = (mousePosition - (Vector2)transform.position).normalized;
         }
