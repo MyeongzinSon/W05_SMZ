@@ -6,10 +6,25 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using Random = UnityEngine.Random;
 
-public class MonsterBase : MonoBehaviour
+public class MonsterBase : MonoBehaviour, ITimeAdjustable
 {
-    #region Protected Variables
+    #region Public Properties
 
+    protected float _timeAdjustCoefficient;
+    public float TimeAdjustCoefficient
+    {
+        get { return _timeAdjustCoefficient; }
+        set
+        {
+            _timeAdjustCoefficient = value;
+            if (m_move != null) { m_move.TimeCoefficient = _timeAdjustCoefficient; }
+        }
+    }
+    public Vector3 Position => transform.position;
+
+    #endregion
+
+    #region Protected Variables
 
     [SerializeField] protected State m_state;
 
@@ -78,6 +93,7 @@ public class MonsterBase : MonoBehaviour
 
     protected virtual void Start()
     {
+        TimeAdjustCoefficient = 1;
         m_originColor = m_renderer.color;
         m_attackColor = new Color(255 / 255f, 122 / 255f, 0 / 255f, 255 / 255f);
         m_hitColor = Color.red;
@@ -193,7 +209,7 @@ public class MonsterBase : MonoBehaviour
 
         while (m_attackCoolTimeCounter < m_attackCoolTime)
         {
-            m_attackCoolTimeCounter += Time.deltaTime;
+            m_attackCoolTimeCounter += Time.deltaTime * TimeAdjustCoefficient;
             yield return null;
         }
 

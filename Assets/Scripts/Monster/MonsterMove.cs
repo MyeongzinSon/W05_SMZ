@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class MonsterMove : MonoBehaviour
 {
+    public float TimeCoefficient;
     public Vector3 MoveDir { get; set; } = Vector3.one;
 
     MonsterGround m_ground;
@@ -22,7 +23,7 @@ public class MonsterMove : MonoBehaviour
 
     public void Move()
     {
-        transform.position += MoveDir.normalized * m_moveSpeed * Time.deltaTime;
+        transform.position += MoveDir.normalized * m_moveSpeed * TimeCoefficient * Time.deltaTime;
         transform.localScale = new Vector3((MoveDir.x < 0 ? m_localScale.x * -1 : m_localScale.x), m_localScale.y, m_localScale.z);
     }
 
