@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_jumpBuffer = 0.2f;
     [SerializeField] private float m_smashCriterionTime = 0.2f;
     [SerializeField] private int m_ignoreRayResult = 0;
+    [Header("TimeField")]
+    [SerializeField] private GameObject m_timeFieldObject;
 
     private Vector2 m_velocity;
     private float m_directionX;
@@ -199,6 +201,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            m_timeFieldObject.SetActive(!m_timeFieldObject.activeSelf);
+        }
+#endif
         //if (IsKeyboardAndMouse)
         //{
         //    CompensateDirection();
