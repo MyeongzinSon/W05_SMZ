@@ -48,6 +48,8 @@ MonoBehaviour:
   m_dashStiffPerDamage: 0.02
   m_dashStiffDelay: 0
   m_dashStiffTimeScale: 0.5
+  m_bulletTimePreDelay: 0
+  m_bulletTimePostDelay: 0
   m_bulletTimeScale: 0.05
   m_smashBulletTimeDuration: 2
   m_additionalBulletTimePerTarget: 0.25
@@ -464,9 +466,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_SortingOrder: 4
+  m_Sprite: {fileID: 21300000, guid: 7ed542dfa822dfb4fae6dee84ce03367, type: 3}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -510,17 +512,26 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0.05
-      inSlope: 0.95
-      outSlope: 0.95
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
+      time: 0.1
+      value: 0.05
+      inSlope: -0
+      outSlope: 1.0555556
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.95
-      outSlope: 0.95
+      inSlope: 1.0555556
+      outSlope: 1.0555556
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -777,6 +788,7 @@ MonoBehaviour:
   m_jumpBuffer: 0.2
   m_smashCriterionTime: 0.2
   m_ignoreRayResult: 1
+  m_timeFieldObject: {fileID: 3984534518270165282}
   m_dashDirection: {x: 1, y: 1}
 --- !u!114 &7370753133849849863
 MonoBehaviour:
