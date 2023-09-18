@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, ITimeAdjustable
 {
     const string k_keyboardAndMouseString = "Keyboard&Mouse";
     const float k_almosZero = 0.001f;
@@ -99,6 +99,26 @@ public class PlayerController : MonoBehaviour
     private bool OnBulletTime { get { return m_timeController.OnBulletTime; } }
     public bool IsSmashInput { get { return m_smashInput; } }
 
+    public bool InTimeField { get; set; } = false;
+    private float _timeAdjustCoefficient = 1;
+    public float TimeAdjustCoefficient { 
+        get => _timeAdjustCoefficient; 
+        set
+        {
+            bool isSlowed = _timeAdjustCoefficient > value;
+            if (isSlowed) m_rigidBody.velocity /= _timeAdjustCoefficient;
+            _timeAdjustCoefficient = value;
+            if (isSlowed) m_rigidBody.velocity *= value;
+        }
+    }
+        public Vector3 Position => transform.position;
+
+    void OnGUI()
+    {
+        var style = new GUIStyle();
+        style.fontSize = 50;
+        GUI.Label(new Rect(100, 100, 400, 200), $"time : {TimeAdjustCoefficient}", style);
+    }
 
     void Awake()
     {
@@ -219,9 +239,6 @@ public class PlayerController : MonoBehaviour
         m_onLeftWall = m_ground.GetOnLeftWall();
         m_onWall = m_ground.GetOnWall();
 
-        m_gravityCoefficient = (-2 * m_jumpHeight) / (m_jumpTimeToApex * m_jumpTimeToApex * Physics2D.gravity.y);
-        m_rigidBody.gravityScale = m_gravityMultiplier * m_gravityCoefficient;
-
         if (m_jumpBuffer > 0)
         {
             if (m_desiredJump)
@@ -338,10 +355,12 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
         m_rigidBody.velocity = new Vector2(m_velocity.x, Mathf.Max(m_velocity.y, -m_maxFallSpeed));
+        //Debug.Log(m_rigidBody.velocity);
 
         SetGravity();
+        m_gravityCoefficient = (-2 * m_jumpHeight) / (m_jumpTimeToApex * m_jumpTimeToApex * Physics2D.gravity.y);
+        m_rigidBody.gravityScale = m_gravityMultiplier * m_gravityCoefficient * TimeAdjustCoefficient;
     }
     private void SetVelocity()
     {
@@ -354,7 +373,7 @@ public class PlayerController : MonoBehaviour
 
             if (m_directionY > 0)
             {
-                m_velocity.y = m_speedY;
+                m_velocity.y = m_speedY * TimeAdjustCoefficient;
             }
             else if (m_directionY == 0 && ((m_onRightWall && m_desiredVelocityX > 0) || (m_onLeftWall && m_desiredVelocityX < 0)))
             {
@@ -362,7 +381,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                m_velocity.y = -m_speedY;
+                m_velocity.y = -m_speedY * TimeAdjustCoefficient;
             }
         }
 
@@ -374,7 +393,7 @@ public class PlayerController : MonoBehaviour
         {
             if (!m_hasPerformedWallJump)
             {
-                m_velocity.x = m_desiredVelocityX;
+                m_velocity.x = m_desiredVelocityX * TimeAdjustCoefficient;
             }
             m_lastVelocityY = m_velocity.y;
         }
@@ -411,7 +430,7 @@ public class PlayerController : MonoBehaviour
 
             if (!m_isJumping)
             {
-                m_velocity.y = -m_dashGravity;
+                m_velocity.y = -m_dashGravity * TimeAdjustCoefficient;
             }
         }
         else
@@ -451,7 +470,7 @@ public class PlayerController : MonoBehaviour
 
             if (!m_isJumping)
             {
-                m_velocity.y = -m_smashGravity;
+                m_velocity.y = -m_smashGravity * TimeAdjustCoefficient;
             }
         }
         else
@@ -486,7 +505,7 @@ public class PlayerController : MonoBehaviour
                     m_coyoteWallDirection = 0;
                     m_canJumpAgain = true;
                 }
-                m_velocity.x = (m_speedX * direction + m_desiredVelocityX) * m_wallJumpXModifier;
+                m_velocity.x = (m_speedX * direction + m_desiredVelocityX) * m_wallJumpXModifier * TimeAdjustCoefficient;
                 m_velocity.y = jumpSpeed;
                 m_hasPerformedWallJump = true;
             }
