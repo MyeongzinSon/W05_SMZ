@@ -80,10 +80,10 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
     private bool m_isJumping;
     private bool m_canJumpAgain = false;
     private bool m_canJumpOrDash = true;
-    private bool m_isDashing;
-    private bool m_hasPerformedDash;
-    private bool m_isSmashing;
-    private bool m_hasPerformedSmash;
+    private bool m_isDashing = false;
+    private bool m_hasPerformedDash = false;
+    private bool m_isSmashing = false;
+    private bool m_hasPerformedSmash = false;
     private bool m_onGround;
     private bool m_onWall;
     private bool m_wasOnWall;
@@ -111,13 +111,6 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
     }
     public Vector3 Position => transform.position;
     public List<ITimeAdjustable> targetList { get; set; }
-
-    void OnGUI()
-    {
-        var style = new GUIStyle();
-        style.fontSize = 50;
-        GUI.Label(new Rect(100, 100, 400, 200), $"time : {TimeAdjustCoefficient}", style);
-    }
 
     void Awake()
     {
@@ -220,12 +213,6 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
 
     private void Update()
     {
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            m_timeField.SetActive(!m_timeField.gameObject.activeSelf);
-        }
-#endif
         //if (IsKeyboardAndMouse)
         //{
         //    CompensateDirection();
