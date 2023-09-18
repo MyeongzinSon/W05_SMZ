@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Monster : MonoBehaviour
+public class Monster : MonoBehaviour, ITimeAdjustable
 {
     [HideInInspector] public SpriteRenderer m_renderer;
     [HideInInspector] public Collider2D m_collider;
@@ -25,6 +25,20 @@ public class Monster : MonoBehaviour
     [Header("Range")]
     [SerializeField] protected float m_detectRange;
     [SerializeField] protected float m_attackRange;
+
+    public bool InTimeField { get; set; } = false;
+    protected float _timeAdjustCoefficient;
+    public float TimeAdjustCoefficient
+    {
+        get { return _timeAdjustCoefficient; }
+        set
+        {
+            _timeAdjustCoefficient = value;
+            if (m_move != null) { m_move.TimeCoefficient = _timeAdjustCoefficient; }
+        }
+    }
+    public Vector3 Position => transform.position;
+    public List<ITimeAdjustable> targetList { get; set; }
 
     protected virtual void Awake()
     {
