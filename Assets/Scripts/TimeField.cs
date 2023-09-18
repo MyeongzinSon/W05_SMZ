@@ -49,8 +49,10 @@ public class TimeField : MonoBehaviour
             if (a != null && (MonoBehaviour)a != null)
             {
                 var distance = Vector3.Distance(a.Position, transform.position);
-                var radius = standardScale / 2;
-                a.TimeAdjustCoefficient = distanceToCoefficientCurve.Evaluate(distance / radius);
+                var maxRadius = standardScale / 2;
+                var currentRadius = scaleValue / 2;
+                var value = 1 + (distance - currentRadius) / maxRadius;
+                a.TimeAdjustCoefficient = distanceToCoefficientCurve.Evaluate(value);
             }
             else
             {
