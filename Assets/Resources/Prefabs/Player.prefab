@@ -788,7 +788,7 @@ MonoBehaviour:
   m_jumpCutoffGravity: 5.23
   m_downwardGravity: 1.1
   m_defaultGravity: 1
-  m_maxFallSpeed: 100
+  m_maxFallSpeed: 30
   m_wallJumpXModifier: 1.5
   m_coyoteTime: 0.2
   m_dashDistance: 7
@@ -1020,6 +1020,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
+  invunerableDuration: 0.2
+  invunerableColor: {r: 1, g: 0, b: 0, a: 1}
+  invunerableBlinkNum: 1
 --- !u!61 &7370753133849849868
 BoxCollider2D:
   m_ObjectHideFlags: 0
