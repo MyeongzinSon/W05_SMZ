@@ -10,6 +10,7 @@ public class MonsterBase : MonoBehaviour, ITimeAdjustable
 {
     #region Public Properties
 
+    public bool InTimeField { get; set; } = false;
     protected float _timeAdjustCoefficient;
     public float TimeAdjustCoefficient
     {

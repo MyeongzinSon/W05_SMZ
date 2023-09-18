@@ -27,8 +27,8 @@ public class TimeField : MonoBehaviour
 
     public void SetScaleValue(float value)
     {
-        scaleValue = value;
-        transform.localScale = Vector3.one * scaleValue;
+        transform.localScale = Vector3.one * value;
+        scaleValue = transform.lossyScale.x;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -36,6 +36,7 @@ public class TimeField : MonoBehaviour
         if (collision.gameObject.TryGetComponent<ITimeAdjustable>(out var a))
         {
             timeAdjustables.Add(a);
+            a.InTimeField = true;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -44,6 +45,7 @@ public class TimeField : MonoBehaviour
         {
             timeAdjustables.Remove(a);
             a.TimeAdjustCoefficient = 1;
+            a.InTimeField = false;
         }
     }
 }

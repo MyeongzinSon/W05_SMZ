@@ -9,8 +9,8 @@ public class Bullet : MonoBehaviour, ITimeAdjustable
     public float m_bulletSpeed;
     public int m_bulletDamage;
 
+    public bool InTimeField { get; set; } = false;
     public float TimeAdjustCoefficient { get; set; } = 1;
-
     public Vector3 Position => transform.position;
 
     private void Update()
