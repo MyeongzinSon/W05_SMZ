@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
 
 
     Transform m_player;
-    TimeController m_timeController;
+    TimeField m_TimeField;
 
     Vector3 m_currentPos;
 
@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         m_player = GameObject.FindWithTag("Player").transform;
-        m_timeController = FindObjectOfType<TimeController>();
+        m_TimeField = m_player.GetComponentInChildren<TimeField>(true);
 
         m_currentPos = transform.position;
         m_originCameraSize = Camera.main.orthographicSize;
@@ -33,13 +33,18 @@ public class CameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        m_currentPos = Vector3.Lerp(m_currentPos, m_player.position, Time.deltaTime * m_chaseSpeed / (m_timeController.OnBulletTime ? m_timeController.BulletTimeScale : 1));
+        m_currentPos = Vector3.Lerp(m_currentPos, m_player.position, Time.deltaTime * m_chaseSpeed);
         transform.position = m_currentPos + m_offset;
 
-        if (m_timeController.OnBulletTime == true)
-            Camera.main.orthographicSize = Mathf.Lerp(m_currentCameraSize, m_smashCameraSize, Time.deltaTime * m_originSizeChangeSpeed / (m_timeController.OnBulletTime ? m_timeController.BulletTimeScale : 1));
+        if (m_TimeField.OnBulletTime)
+        {
+            var targetSize = Mathf.Lerp(m_originCameraSize, m_smashCameraSize, m_TimeField.BulletTimeProgressValue);
+            Camera.main.orthographicSize = Mathf.Lerp(m_currentCameraSize, targetSize, Time.deltaTime * m_originSizeChangeSpeed);
+        }
         else
+        {
             Camera.main.orthographicSize = Mathf.Lerp(m_currentCameraSize, m_originCameraSize, Time.deltaTime * m_originSizeChangeSpeed);
+        }
         m_currentCameraSize = Camera.main.orthographicSize;
     }
 }

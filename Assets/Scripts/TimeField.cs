@@ -33,9 +33,8 @@ public class TimeField : MonoBehaviour
         if (bulletTimeCounter > 0)
         {
             bulletTimeCounter -= Time.deltaTime;
-            BulletTimeProgressValue = bulletTimeCounter / bulletTimeDuration;
+            SetProgressValue(bulletTimeCounter / bulletTimeDuration);
             SetScaleValueWithT(BulletTimeProgressValue);
-            UIManager.Instance.UpdateUIBulletTime(BulletTimeProgressValue);
             if (bulletTimeCounter <= 0)
             {
                 EndBulletTime();
@@ -79,7 +78,7 @@ public class TimeField : MonoBehaviour
                 bulletTimeCounter = -1;
             }
             SetScaleValue(standardScale);
-            UIManager.Instance.UpdateUIBulletTime(1);
+            SetProgressValue(1);
         }
     }
     public void EndBulletTime()
@@ -87,7 +86,7 @@ public class TimeField : MonoBehaviour
         if (OnBulletTime)
         {
             OnBulletTime = false;
-            UIManager.Instance.UpdateUIBulletTime(0);
+            SetProgressValue(0);
         }
     }
     public void AddBonusBulletTime(int num)
@@ -125,5 +124,10 @@ public class TimeField : MonoBehaviour
             a.TimeAdjustCoefficient = 1;
             a.InTimeField = false;
         }
+    }
+    void SetProgressValue(float value)
+    {
+        BulletTimeProgressValue = value;
+        UIManager.Instance.UpdateUIBulletTime(BulletTimeProgressValue);
     }
 }
