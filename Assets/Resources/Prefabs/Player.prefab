@@ -113,6 +113,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3384072144477030426}
   - component: {fileID: 5652312262274032029}
+  - component: {fileID: 386361202539547420}
   m_Layer: 6
   m_Name: DashEffect
   m_TagString: Untagged
@@ -243,6 +244,18 @@ TrailRenderer:
   m_MinVertexDistance: 0.01
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &386361202539547420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403313075809605139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e089364647a92914d9e10dd500ceab6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3558740456101434336
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,7 +536,7 @@ MonoBehaviour:
       time: 0.1
       value: 0.05
       inSlope: 0
-      outSlope: 0.0
+      outSlope: 0
       tangentMode: 5
       weightedMode: 0
       inWeight: 0.33333334
