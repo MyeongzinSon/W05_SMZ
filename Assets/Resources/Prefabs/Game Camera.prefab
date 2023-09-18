@@ -101,4 +101,4 @@ MonoBehaviour:
   m_chaseSpeed: 2
   m_smashSizeChangeSpeed: 16
   m_originSizeChangeSpeed: 3
-  m_smashCameraSize: 12
+  m_smashCameraSize: 15
