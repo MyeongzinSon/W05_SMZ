@@ -109,6 +109,8 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
             if (isSlowed) m_rigidBody.velocity *= value;
         }
     }
+    public Vector3 Position => transform.position;
+    public List<ITimeAdjustable> targetList { get; set; }
 
     void OnGUI()
     {
@@ -382,18 +384,11 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
             }
         }
 
-        if (OnBulletTime)
+        if (!m_hasPerformedWallJump)
         {
-
+            m_velocity.x = m_desiredVelocityX * TimeAdjustCoefficient;
         }
-        else
-        {
-            if (!m_hasPerformedWallJump)
-            {
-                m_velocity.x = m_desiredVelocityX * TimeAdjustCoefficient;
-            }
-            m_lastVelocityY = m_velocity.y;
-        }
+        m_lastVelocityY = m_velocity.y;
     }
     private void PerformDash()
     {
