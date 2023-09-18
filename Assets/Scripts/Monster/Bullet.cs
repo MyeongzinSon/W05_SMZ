@@ -26,6 +26,9 @@ public class Bullet : MonoBehaviour, ITimeAdjustable
             collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(m_bulletDamage);
             Destroy(gameObject);
         }
-
+        else if (collision.gameObject.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
