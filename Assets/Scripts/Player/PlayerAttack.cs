@@ -33,6 +33,7 @@ public class PlayerAttack : MonoBehaviour
     public bool CanDash { get { return m_currentStamina >= m_staminaPerDash; } }
     public bool CanSmash { get { return m_currentSmashCooldown <= 0; } }
     public float CurrentStamina { get { return m_currentStamina; } }
+    float TimeCoefficient => m_player.TimeAdjustCoefficient;
 
     private void Awake()
     {
@@ -55,12 +56,12 @@ public class PlayerAttack : MonoBehaviour
     {
         if (m_currentSmashCooldown > 0)
         {
-            m_currentSmashCooldown -= Time.deltaTime;
+            m_currentSmashCooldown -= Time.deltaTime * TimeCoefficient;
         }
         
         if (m_currentStamina < m_maxStamina)
         {
-            m_currentStamina += (m_ground.GetOnGround() || m_ground.GetOnWall()  ? m_staminaRegenOnGround : m_staminaRegen) * Time.deltaTime;
+            m_currentStamina += (m_ground.GetOnGround() || m_ground.GetOnWall()  ? m_staminaRegenOnGround : m_staminaRegen) * Time.deltaTime * TimeCoefficient;
             if (m_currentStamina > m_maxStamina)
             {
                 m_currentStamina = m_maxStamina;
