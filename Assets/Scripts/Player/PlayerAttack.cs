@@ -14,6 +14,10 @@ public class PlayerAttack : MonoBehaviour
     [Header("Smash")]
     [SerializeField] private int m_smashPower;
     [SerializeField] private float m_smashCooldown;
+    [Header("Stiff")]
+    [SerializeField] private float m_dashStiffPerDamage;
+    [SerializeField] private float m_dashStiffDelay;
+    [SerializeField] private float m_dashStiffTimeScale;
     [Header("Layer")]
     [SerializeField] private LayerMask m_attackableLayer;
     [SerializeField] private LayerMask m_itemLayer;
@@ -79,10 +83,10 @@ public class PlayerAttack : MonoBehaviour
     {
         m_currentStamina -= m_staminaPerDash;
         var attacked = PerformAttack(start, end, m_dashPower);
-        //if (attacked.Count > 0)
-        //{
-        //    m_timeField.ApplyDashStiff(attacked);
-        //}
+        if (attacked.Count > 0)
+        {
+            ApplyDashStiff(attacked);
+        }
     }
 
     public void Smash(Vector2 start, Vector2 end)
@@ -97,7 +101,7 @@ public class PlayerAttack : MonoBehaviour
                 m_currentStamina = m_maxStamina;
             }
             m_timeField.StartBulletTime();
-            //m_timeField.ApplyDashStiff(attacked);
+            ApplyDashStiff(attacked);
             m_timeField.EndBulletTime(attacked.Count);
         }
     }
@@ -124,5 +128,23 @@ public class PlayerAttack : MonoBehaviour
             damages.Add(damage);
         });
         return damages;
+    }
+
+    public void ApplyDashStiff(List<int> damages)
+    {
+        StartCoroutine(ApplyDashStiffByDamage(damages));
+    }
+    IEnumerator ApplyDashStiffByDamage(List<int> damamges)
+    {
+        //Debug.Log($"Dash stiff starts! : {damamges.Count} damage(s)");
+        foreach (var damage in damamges)
+        {
+            Time.timeScale = m_dashStiffTimeScale;
+            yield return new WaitForSecondsRealtime(damage * m_dashStiffPerDamage * (m_timeField.OnBulletTime ? 0 : 1));
+            //Debug.Log($"stiff : {damage} * {m_dashStiffPerDamage}");
+            Time.timeScale = 1f;
+            yield return new WaitForSecondsRealtime(m_dashStiffDelay * (m_timeField.OnBulletTime ? 0 : 1));
+
+        }
     }
 }

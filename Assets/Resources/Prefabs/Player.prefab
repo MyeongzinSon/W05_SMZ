@@ -984,6 +984,9 @@ MonoBehaviour:
   m_staminaRegenOnGround: 200
   m_smashPower: 5
   m_smashCooldown: 1.5
+  m_dashStiffPerDamage: 0.02
+  m_dashStiffDelay: 0.01
+  m_dashStiffTimeScale: 0.5
   m_attackableLayer:
     serializedVersion: 2
     m_Bits: 128
