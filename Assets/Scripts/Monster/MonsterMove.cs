@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MonsterMove : MonoBehaviour
 {
-    public float TimeCoefficient;
+    [HideInInspector] public float TimeCoefficient;
     public Vector3 MoveDir { get; set; } = Vector3.one;
 
     MonsterGround m_ground;

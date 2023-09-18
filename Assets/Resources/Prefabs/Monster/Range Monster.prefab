@@ -253,7 +253,7 @@ MonoBehaviour:
   m_attackRange: 5
   m_attackPower: 1
   m_attackingTime: 0.5
-  m_attackCoolTime: 3
+  m_attackCoolTime: 1.5
   m_dropItem: {fileID: 7456019442728126548, guid: 35fb82fc740ee674ea23eb46802ef36e, type: 3}
 --- !u!114 &711428510
 MonoBehaviour:
@@ -267,6 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffaf428459f90b648b319a566e9e3dcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TimeCoefficient: 0
   m_moveSpeed: 2
 --- !u!114 &711428511
 MonoBehaviour:
