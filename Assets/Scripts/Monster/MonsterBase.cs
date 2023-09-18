@@ -22,6 +22,7 @@ public class MonsterBase : MonoBehaviour, ITimeAdjustable
         }
     }
     public Vector3 Position => transform.position;
+    public List<ITimeAdjustable> targetList { get; set; }
 
     #endregion
 

@@ -5,10 +5,16 @@ using UnityEngine;
 
 public class TimeField : MonoBehaviour
 {
+    [Header("Bullet Time")]
+    [SerializeField] float bulletTimeDuration;
+    [SerializeField] float bulletTimeBonusPerHit;
+    [Header("Time Field")]
+    [SerializeField] float standardScale;
     [SerializeField] AnimationCurve distanceToCoefficientCurve;
 
     List<ITimeAdjustable> timeAdjustables;
     float scaleValue;
+    float bulletTimeCounter;
 
     public bool OnBulletTime
     {
@@ -21,13 +27,32 @@ public class TimeField : MonoBehaviour
         scaleValue = transform.lossyScale.x;
         timeAdjustables = new();
     }
+    private void Update()
+    {
+        if (bulletTimeCounter > 0)
+        {
+            bulletTimeCounter -= Time.deltaTime;
+            SetScaleValueWithT(bulletTimeCounter / bulletTimeDuration);
+            if (bulletTimeCounter <= 0)
+            {
+                EndBulletTime();
+            }
+        }
+    }
     private void FixedUpdate()
     {
-        foreach (var a in timeAdjustables)
+        foreach (var a in timeAdjustables.ToList())
         {
-            var distance = Vector3.Distance(a.Position, transform.position);
-            var radius = scaleValue / 2;
-            a.TimeAdjustCoefficient = distanceToCoefficientCurve.Evaluate(distance / radius);
+            if (a != null && (MonoBehaviour)a != null)
+            {
+                var distance = Vector3.Distance(a.Position, transform.position);
+                var radius = standardScale / 2;
+                a.TimeAdjustCoefficient = distanceToCoefficientCurve.Evaluate(distance / radius);
+            }
+            else
+            {
+                timeAdjustables.Remove(a);
+            }
         }
     }
 
@@ -35,36 +60,34 @@ public class TimeField : MonoBehaviour
     {
         gameObject.SetActive(value);
     }
-    public void StartBulletTime()
+    public void StartBulletTime(bool withDuration = false)
     {
         if (!OnBulletTime)
         {
             OnBulletTime = true;
+            if (withDuration)
+            {
+                bulletTimeCounter = bulletTimeDuration;
+            }
+            else
+            {
+                bulletTimeCounter = -1;
+            }
+            SetScaleValue(standardScale);
         }
     }
-    public void EndBulletTime(int attackedNum = 0)
-    {
-        if (attackedNum > 0)
-        {
-            StartCoroutine(EndBulletTimeAfterDelay(2 + attackedNum * 0.25f));
-        }
-        else
-        {
-            ExecuteEndBulletTime();
-        }
-    }
-    IEnumerator EndBulletTimeAfterDelay(float delay)
-    {
-        Debug.Log($"Coroutine with {delay} seconds started. : {Time.realtimeSinceStartup}");
-        yield return new WaitForSecondsRealtime(delay);
-        Debug.Log($"Bullet time ended. : {Time.realtimeSinceStartup}");
-        ExecuteEndBulletTime();
-    }
-    void ExecuteEndBulletTime()
+    public void EndBulletTime()
     {
         if (OnBulletTime)
         {
             OnBulletTime = false;
+        }
+    }
+    public void AddBonusBulletTime(int num)
+    {
+        if (bulletTimeCounter >= 0)
+        {
+            bulletTimeCounter += num * bulletTimeBonusPerHit;
         }
     }
     public void SetScaleValue(float value)
@@ -73,11 +96,16 @@ public class TimeField : MonoBehaviour
         scaleValue = transform.lossyScale.x;
     }
 
+    void SetScaleValueWithT(float t)
+    {
+        SetScaleValue(standardScale * Mathf.Sqrt(Mathf.Max(t, 0)));
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.TryGetComponent<ITimeAdjustable>(out var a))
         {
-            timeAdjustables.Add(a);
+            a.AddThisToList(timeAdjustables);
             a.InTimeField = true;
         }
     }

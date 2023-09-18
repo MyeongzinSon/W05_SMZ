@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour, ITimeAdjustable
     public bool InTimeField { get; set; } = false;
     public float TimeAdjustCoefficient { get; set; } = 1;
     public Vector3 Position => transform.position;
+    public List<ITimeAdjustable> targetList { get; set; }
 
     private void Update()
     { 

@@ -109,7 +109,6 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
             if (isSlowed) m_rigidBody.velocity *= value;
         }
     }
-        public Vector3 Position => transform.position;
 
     void OnGUI()
     {

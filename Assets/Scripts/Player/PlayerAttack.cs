@@ -86,6 +86,7 @@ public class PlayerAttack : MonoBehaviour
         if (attacked.Count > 0)
         {
             ApplyDashStiff(attacked);
+            m_timeField.AddBonusBulletTime(attacked.Count);
         }
     }
 
@@ -100,9 +101,9 @@ public class PlayerAttack : MonoBehaviour
             {
                 m_currentStamina = m_maxStamina;
             }
-            m_timeField.StartBulletTime();
+            m_timeField.StartBulletTime(true);
             ApplyDashStiff(attacked);
-            m_timeField.EndBulletTime(attacked.Count);
+            m_timeField.AddBonusBulletTime(attacked.Count);
         }
     }
 

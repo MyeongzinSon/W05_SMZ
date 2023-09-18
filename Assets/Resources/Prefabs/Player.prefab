@@ -48,8 +48,6 @@ MonoBehaviour:
   m_dashStiffPerDamage: 0.02
   m_dashStiffDelay: 0
   m_dashStiffTimeScale: 0.5
-  m_bulletTimePreDelay: 0
-  m_bulletTimePostDelay: 0
   m_bulletTimeScale: 0.05
   m_smashBulletTimeDuration: 2
   m_additionalBulletTimePerTarget: 0.25
@@ -506,6 +504,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a14bd0c93f7c9b42aa6f237981c6720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletTimeDuration: 2
+  bulletTimeBonusPerHit: 0.25
+  standardScale: 20
   distanceToCoefficientCurve:
     serializedVersion: 2
     m_Curve:
