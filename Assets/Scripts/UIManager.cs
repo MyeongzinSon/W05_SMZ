@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image m_smashCoolDownImg;
     [SerializeField] private GameObject m_enemyInfo;
     [SerializeField] private Text m_enemyText;
+    [SerializeField] private Image m_bulletTimeEffectImg;
     #endregion
 
     #region UI_Use Variable
@@ -22,10 +23,18 @@ public class UIManager : MonoBehaviour
     [HideInInspector] public float MaxCoolDownUI;
     #endregion
 
+    float bulletTimeEffectInitialAlpha;
+
     #region MonoBehaviour Methods
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        bulletTimeEffectInitialAlpha = m_bulletTimeEffectImg.color.a;
+        UpdateUIBulletTime(0);
     }
     #endregion
 
@@ -57,4 +66,10 @@ public class UIManager : MonoBehaviour
         m_enemyText.text = ($"{m_enemyCount} / {MaxEnemy}");
     }
 
+    public void UpdateUIBulletTime(float value)
+    {
+        var color = m_bulletTimeEffectImg.color;
+        color.a = bulletTimeEffectInitialAlpha * value;
+        m_bulletTimeEffectImg.color = color;
+    }
 }

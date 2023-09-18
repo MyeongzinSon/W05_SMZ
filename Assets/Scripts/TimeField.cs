@@ -21,6 +21,7 @@ public class TimeField : MonoBehaviour
         get => gameObject.activeSelf;
         private set => gameObject.SetActive(value);
     }
+    public float BulletTimeProgressValue { get; private set; }
 
     private void Awake()
     {
@@ -32,7 +33,9 @@ public class TimeField : MonoBehaviour
         if (bulletTimeCounter > 0)
         {
             bulletTimeCounter -= Time.deltaTime;
-            SetScaleValueWithT(bulletTimeCounter / bulletTimeDuration);
+            BulletTimeProgressValue = bulletTimeCounter / bulletTimeDuration;
+            SetScaleValueWithT(BulletTimeProgressValue);
+            UIManager.Instance.UpdateUIBulletTime(BulletTimeProgressValue);
             if (bulletTimeCounter <= 0)
             {
                 EndBulletTime();
@@ -74,6 +77,7 @@ public class TimeField : MonoBehaviour
                 bulletTimeCounter = -1;
             }
             SetScaleValue(standardScale);
+            UIManager.Instance.UpdateUIBulletTime(1);
         }
     }
     public void EndBulletTime()
@@ -81,6 +85,7 @@ public class TimeField : MonoBehaviour
         if (OnBulletTime)
         {
             OnBulletTime = false;
+            UIManager.Instance.UpdateUIBulletTime(0);
         }
     }
     public void AddBonusBulletTime(int num)
@@ -98,7 +103,8 @@ public class TimeField : MonoBehaviour
 
     void SetScaleValueWithT(float t)
     {
-        SetScaleValue(standardScale * Mathf.Sqrt(Mathf.Max(t, 0)));
+        var value = standardScale * Mathf.Sqrt(Mathf.Max(t, 0));
+        SetScaleValue(value);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
