@@ -788,7 +788,6 @@ MonoBehaviour:
   m_jumpBuffer: 0.2
   m_smashCriterionTime: 0.2
   m_ignoreRayResult: 1
-  m_timeFieldObject: {fileID: 3984534518270165282}
   m_dashDirection: {x: 1, y: 1}
 --- !u!114 &7370753133849849863
 MonoBehaviour:

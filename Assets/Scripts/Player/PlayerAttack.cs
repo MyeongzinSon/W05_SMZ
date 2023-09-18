@@ -23,7 +23,7 @@ public class PlayerAttack : MonoBehaviour
     private PlayerGround m_ground;
     private PlayerHealth m_health;
     private PlayerRayProjector m_rayProjector;
-    private TimeController m_timeController;
+    private TimeField m_timeField;
 
     private float m_currentStamina;
     private float m_currentSmashCooldown;
@@ -42,7 +42,7 @@ public class PlayerAttack : MonoBehaviour
         m_ground = GetComponent<PlayerGround>();
         m_health = GetComponent<PlayerHealth>();
         m_rayProjector = GetComponent<PlayerRayProjector>();
-        m_timeController = FindObjectOfType<TimeController>();
+        m_timeField = GetComponentInChildren<TimeField>(true);
 
         m_currentStamina = m_maxStamina;
         m_currentSmashCooldown = -1;
@@ -69,50 +69,51 @@ public class PlayerAttack : MonoBehaviour
         }
         UIManager.Instance.UpdateUIAtk(CanDash, m_currentStamina, m_currentSmashCooldown);
 
-        if (!m_player.IsSmashInput && m_timeController.OnBulletTime && !CanDash)
+        if (!m_player.IsSmashInput && m_timeField.OnBulletTime && !CanDash)
         {
-            m_timeController.EndBulletTime();
+            m_timeField.EndBulletTime();
         }
     }
 
     public void Dash(Vector2 start, Vector2 end)
     {
         m_currentStamina -= m_staminaPerDash;
-        PerformAttack(start, end, m_dashPower);
+        var attacked = PerformAttack(start, end, m_dashPower);
+        //if (attacked.Count > 0)
+        //{
+        //    m_timeField.ApplyDashStiff(attacked);
+        //}
     }
 
     public void Smash(Vector2 start, Vector2 end)
     {
         m_currentSmashCooldown = m_smashCooldown;
-        int attackedNum = PerformAttack(start, end, m_smashPower);
-        if (attackedNum > 0)
+        var attacked = PerformAttack(start, end, m_smashPower);
+        if (attacked.Count > 0)
         {
             m_currentStamina += m_staminaPerDash;
             if (m_currentStamina > m_maxStamina)
             {
                 m_currentStamina = m_maxStamina;
             }
-            m_timeController.StartBulletTime();
-            m_timeController.EndBulletTime(attackedNum);
+            m_timeField.StartBulletTime();
+            //m_timeField.ApplyDashStiff(attacked);
+            m_timeField.EndBulletTime(attacked.Count);
         }
     }
 
-    int PerformAttack(Vector2 start, Vector2 end, int damage)
+    List<int> PerformAttack(Vector2 start, Vector2 end, int damage)
     {
-        m_rayProjector.SelectTransforms(start, end, m_itemLayer).Select(i => i.GetComponent<ItemBase>()).ToList().ForEach(i => i.OnUse(m_health));
-        //if (items.Count > 0)
-        //{
-        //    items;
-        //}
+        m_rayProjector.SelectTransforms(start, end, m_itemLayer).
+            Select(i => i.GetComponent<ItemBase>()).
+            ToList().
+            ForEach(i => i.OnUse(m_health));
 
-        var attackables = m_rayProjector.SelectTransforms(start, end, m_attackableLayer).Select(a => a.GetComponent<IDamagable>()).ToList();
+        var attackables = m_rayProjector.SelectTransforms(start, end, m_attackableLayer).
+            Select(a => a.GetComponent<IDamagable>()).
+            ToList();
         var damages = InflictDamages(attackables, damage);
-        if (damages.Count > 0)
-        {
-            m_timeController.ApplyDashStiff(damages);
-        }
-        return damages.Count;
-
+        return damages;
     }
 
     List<int> InflictDamages(List<IDamagable> targets, int damage)

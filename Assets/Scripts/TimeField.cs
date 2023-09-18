@@ -10,6 +10,12 @@ public class TimeField : MonoBehaviour
     List<ITimeAdjustable> timeAdjustables;
     float scaleValue;
 
+    public bool OnBulletTime
+    {
+        get => gameObject.activeSelf;
+        private set => gameObject.SetActive(value);
+    }
+
     private void Awake()
     {
         scaleValue = transform.lossyScale.x;
@@ -25,6 +31,56 @@ public class TimeField : MonoBehaviour
         }
     }
 
+    public void SetActive(bool value)
+    {
+        gameObject.SetActive(value);
+    }
+    public void StartBulletTime()
+    {
+        if (!OnBulletTime)
+        {
+            OnBulletTime = true;
+        }
+    }
+    public void EndBulletTime(int attackedNum = 0)
+    {
+        if (attackedNum > 0)
+        {
+            StartCoroutine(EndBulletTimeAfterDelay(2 + attackedNum * 0.25f));
+        }
+        else
+        {
+            ExecuteEndBulletTime();
+        }
+    }
+    IEnumerator EndBulletTimeAfterDelay(float delay)
+    {
+        Debug.Log($"Coroutine with {delay} seconds started. : {Time.realtimeSinceStartup}");
+        yield return new WaitForSecondsRealtime(delay);
+        Debug.Log($"Bullet time ended. : {Time.realtimeSinceStartup}");
+        ExecuteEndBulletTime();
+    }
+    void ExecuteEndBulletTime()
+    {
+        if (OnBulletTime)
+        {
+            OnBulletTime = false;
+        }
+    }
+    public void ApplyDashStiff(List<int> damages)
+    {
+        StartCoroutine(ApplyDashStiffByDamage(damages));
+    }
+    IEnumerator ApplyDashStiffByDamage(List<int> damamges)
+    {
+        //Debug.Log($"Dash stiff starts! : {damamges.Count} damage(s)");
+        foreach (var damage in damamges)
+        {
+            yield return new WaitForSecondsRealtime(damage * 0.2f * (OnBulletTime ? 0 : 1));
+            //Debug.Log($"stiff : {damage} * {m_dashStiffPerDamage}");
+            yield return new WaitForSecondsRealtime(0 * (OnBulletTime ? 0 : 1));
+        }
+    }
     public void SetScaleValue(float value)
     {
         transform.localScale = Vector3.one * value;

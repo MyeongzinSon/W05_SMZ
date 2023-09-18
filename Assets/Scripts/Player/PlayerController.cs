@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
     PlayerAttack m_attack;
     PlayerInput m_input;
     PlayerRayProjector m_rayProjector;
-    TimeController m_timeController;
+    TimeField m_timeField;
 
     [Header("Move")]
     [SerializeField] private float m_speedX;
@@ -49,8 +49,6 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
     [SerializeField] private float m_jumpBuffer = 0.2f;
     [SerializeField] private float m_smashCriterionTime = 0.2f;
     [SerializeField] private int m_ignoreRayResult = 0;
-    [Header("TimeField")]
-    [SerializeField] private GameObject m_timeFieldObject;
 
     private Vector2 m_velocity;
     private float m_directionX;
@@ -96,7 +94,7 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
     public bool IsKeyboardAndMouse { get { return m_input.currentControlScheme.Equals(k_keyboardAndMouseString); } }
     public Vector2 DashDirection { get { return m_dashDirection; } }
     public float IndicatorDistance { get { return m_smashInput && m_attack.CanSmash ? m_smashDistance : m_dashDistance; } }
-    private bool OnBulletTime { get { return m_timeController.OnBulletTime; } }
+    private bool OnBulletTime { get { return m_timeField.OnBulletTime; } }
     public bool IsSmashInput { get { return m_smashInput; } }
 
     public bool InTimeField { get; set; } = false;
@@ -129,7 +127,7 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
         m_attack = GetComponent<PlayerAttack>();
         m_input = GetComponent<PlayerInput>();
         m_rayProjector = GetComponent<PlayerRayProjector>();
-        m_timeController = FindObjectOfType<TimeController>();
+        m_timeField = GetComponentInChildren<TimeField>(true);
 
         m_gravityMultiplier = m_defaultGravity;
     }
@@ -175,7 +173,7 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
             {
                 if (m_attack.CanSmash)
                 {
-                    m_timeController.StartBulletTime();
+                    m_timeField.StartBulletTime();
                     m_canJumpOrDash = false;
                     m_rigidBody.velocity = new Vector2(m_rigidBody.velocity.x, Mathf.Max(m_rigidBody.velocity.y, m_rigidBody.velocity.y / 4));
                 }
@@ -193,7 +191,7 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
                 if (m_attack.CanSmash)
                 {
                     m_desiredSmash = true;
-                    m_timeController.EndBulletTime();
+                    m_timeField.EndBulletTime();
                 }
             }
             m_smashInput = false;
@@ -224,7 +222,7 @@ public class PlayerController : MonoBehaviour, ITimeAdjustable
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            m_timeFieldObject.SetActive(!m_timeFieldObject.activeSelf);
+            m_timeField.SetActive(!m_timeField.gameObject.activeSelf);
         }
 #endif
         //if (IsKeyboardAndMouse)
