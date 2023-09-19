@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class LogoStart : MonoBehaviour
 {
-    [SerializeField ]private GameObject m_text_Dash;
+    [SerializeField] private GameObject m_text_Dash;
     [SerializeField] private GameObject m_text_Rush;
+    [SerializeField] private GameObject m_text_Plus;
     [SerializeField] private GameObject m_startBtn;
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,8 @@ public class LogoStart : MonoBehaviour
         m_text_Dash.SetActive(true);
         yield return new WaitForSecondsRealtime(0.6f);
         m_text_Rush.SetActive(true);
+        yield return new WaitForSecondsRealtime(0.6f);
+        m_text_Plus.SetActive(true);
         yield return new WaitForSecondsRealtime(0.6f);
         m_startBtn.SetActive(true);
     }
